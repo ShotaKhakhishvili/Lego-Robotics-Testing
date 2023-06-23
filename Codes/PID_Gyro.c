@@ -22,7 +22,7 @@ void PID_Gyro_On_ForTime(PID* pid, float time, bool parallel = false)
 */
 void PID_Gyro_Rotate(PID* pid, float angle, bool parallel = false)
 {
-	float initAngle = getGyroDegrees(gyro); // Vinaxavt Sawyis Kutxes
+	float initAngle = fusal_angle; // Vinaxavt Sawyis Kutxes
 
 	pid->setpoint = initAngle + angle; // Setpointad Vutitebt Sawyiss + Sasurveli Shemotrialebis Kutxes
 
@@ -43,7 +43,7 @@ void PID_Gyro_Rotate(PID* pid, float angle, bool parallel = false)
 */
 void PID_Gyro_On_Until_Reflected(PID* pid, float _setpoint, bool parallel = false)
 {
-	if(_setpoint >= getColorReflected(color1))
+	if(_setpoint >= getColorReflected(col1))
 	{
 		PID_Gyro_Start(pid, untilReflected_high, _setpoint);
 	}

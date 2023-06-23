@@ -1,4 +1,4 @@
-enum pidType{LineFollower, Gyro, Gyro_OneSided, Hand, Encoder};
+enum pidType{LineFollower, Gyro, Gyro_OneSided, Encoder};
 enum useType{none, on_always, on_untilDone, forTime,
 						untilReflected_high, untilReflected_low,
 						untilEncoder_high, untilEncoder_low,
@@ -39,9 +39,9 @@ void calculateFactor(int i, int &startTime, bool &factor)
 			}
 		}
 
-		task_prevUsage[i] = task_usage[i];
+	task_prevUsage[i] = task_usage[i];
 
-		if(factor)
+	if(factor)
 		{
 			switch(task_usage[i].use)
 			{
@@ -53,16 +53,13 @@ void calculateFactor(int i, int &startTime, bool &factor)
 				switch(task_usage[i].pid_type)
 				{
 				case LineFollower:
-					factor = !inRange(getColorReflected(color1), tasks[i]->setpoint, tasks[i]->acceptableRange);
+					factor = !inRange(getColorReflected(col1), tasks[i]->setpoint, tasks[i]->acceptableRange);
 					break;
 				case Gyro:
-					factor = !inRange(getGyroDegrees(gyro), tasks[i]->setpoint, tasks[i]->acceptableRange);
+					factor = !inRange(fusal_angle, tasks[i]->setpoint, tasks[i]->acceptableRange);
 					break;
 				case Gyro_OneSided:
-					factor = !inRange(getGyroDegrees(gyro), tasks[i]->setpoint, tasks[i]->acceptableRange);
-					break;
-				case Hand:
-					factor = !inRange(getMotorEncoder(hand), tasks[i]->setpoint, tasks[i]->acceptableRange);
+					factor = !inRange(fusal_angle, tasks[i]->setpoint, tasks[i]->acceptableRange);
 					break;
 				case Encoder:
 					factor = !inRange(getMotorEncoder(wheelR) + getMotorEncoder(wheelL), tasks[i]->setpoint, tasks[i]->acceptableRange);
@@ -76,11 +73,11 @@ void calculateFactor(int i, int &startTime, bool &factor)
 				break;
 
 			case untilReflected_high:
-				factor = (bool)(getColorReflected(color1) < task_usage[i]._setpoint);
+				factor = (bool)(getColorReflected(col1) < task_usage[i]._setpoint);
 				break;
 
 			case untilReflected_low:
-				factor = (bool)(getColorReflected(color1) > task_usage[i]._setpoint);
+				factor = (bool)(getColorReflected(col1) > task_usage[i]._setpoint);
 				break;
 
 			case untilEncoder_high:
@@ -106,11 +103,11 @@ void calculateFactor(int i, int &startTime, bool &factor)
 				break;
 
 			case untilDegree_high:
-				factor = (bool)(getGyroDegrees(gyro) < task_usage[i]._setpoint);
+				factor = (bool)(fusal_angle < task_usage[i]._setpoint);
 				break;
 
 			case untilDegree_low:
-				factor = (bool)(getGyroDegrees(gyro) > task_usage[i]._setpoint);
+				factor = (bool)(fusal_angle > task_usage[i]._setpoint);
 				break;
 
 				// ultra sonic win uyenia robots

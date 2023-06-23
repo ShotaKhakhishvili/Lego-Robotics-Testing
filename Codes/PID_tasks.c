@@ -17,7 +17,7 @@ task PID_LineFollower() // Amushavebs PID-s Romelic Akontrolebs Borblebs Color S
 		if(factor && !(task_usage[0].use == on_untilDone && doneFor >= 20)) // Mushaobs Tu Factor Aris Chartuli
 		{
 			// Vanaxlebt PID-s Output-s
-			PID_Update(tasks[0], tasks[0]->setpoint/4, getColorReflected(color1)/4);
+			PID_Update(tasks[0], tasks[0]->setpoint/4, getColorReflected(col1)/4);
 
 			setMotorSpeed(wheelR, tasks[0]->moveSpeed - tasks[0]->out * tasks[0]->rev);
 			setMotorSpeed(wheelL, tasks[0]->moveSpeed + tasks[0]->out * tasks[0]->rev);
@@ -55,7 +55,7 @@ task PID_gyro() // Amushavebs PID-s Romelic Akontrolebs Borblebs Gyro-s Mixedvit
 
 		if(factor && !(task_usage[1].use == on_untilDone && doneFor >= 50)) // Mushaobs Tu Factor Aris Chartuli
 		{
-			PID_Update(tasks[1], tasks[1]->setpoint, getGyroDegrees(gyro));
+			PID_Update(tasks[1], tasks[1]->setpoint, fusal_angle);
 
 			float addition = 0;
 
@@ -66,17 +66,17 @@ task PID_gyro() // Amushavebs PID-s Romelic Akontrolebs Borblebs Gyro-s Mixedvit
 			{
 				if(tasks[1]->side)
 				{
-					setMotorSpeed(wheelR, tasks[1]->moveSpeed - tasks[1]->out);
+					setMotorSpeed(wheelR, tasks[1]->moveSpeed + tasks[1]->out);
 				}
 				else
 				{
-					setMotorSpeed(wheelL, tasks[1]->moveSpeed + tasks[1]->out);
+					setMotorSpeed(wheelL, tasks[1]->moveSpeed - tasks[1]->out);
 				}
 			}
 			else
 			{
-				setMotorSpeed(wheelR, tasks[1]->moveSpeed - tasks[1]->out);
-				setMotorSpeed(wheelL, tasks[1]->moveSpeed + tasks[1]->out);
+				setMotorSpeed(wheelR, tasks[1]->moveSpeed + tasks[1]->out);
+				setMotorSpeed(wheelL, tasks[1]->moveSpeed - tasks[1]->out);
 			}
 
 			if(task_usage[1] == none)

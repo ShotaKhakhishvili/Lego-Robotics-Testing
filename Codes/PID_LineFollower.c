@@ -53,7 +53,7 @@ void PID_LineFollower_On_Until_Distance(PID* pid, float distance, bool parallel 
 */
 void PID_LineFollower_On_Until_Reflected(PID* pid, float _setpoint, bool parallel = false)
 {
-	if(_setpoint >= getColorReflected(color1))
+	if(_setpoint >= getColorReflected(col1))
 	{
 		PID_LineFollower_Start(pid, untilReflected_high, _setpoint);
 	}

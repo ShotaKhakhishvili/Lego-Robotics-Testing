@@ -31,11 +31,9 @@ int ColorCheck()
 
 	if(ans)
 	{
-		playSound(soundBeepBeep);
 		return 3;
 	}
 
-	playSound(soundBlip);
 	return 2;
 }
 

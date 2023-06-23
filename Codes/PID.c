@@ -30,6 +30,7 @@ struct PID // PID-s Struqtura. Sheinaxavs PID-s Mnishvnelobebs.
 
 	float gearChangeValue;
 
+	float error; // Setpoint - Measurement
 	float out; // Correction
 }PID;
 
@@ -101,6 +102,7 @@ void PID_Update(PID* pid, float setPoint, float measurement)
 
 	float error = setPoint - measurement;
 
+	pid->error = error;
 
 	/*
 	** Vitvlit Proporciulis Mnishvnelobas

@@ -24,7 +24,7 @@ void PID_Encoder_On_ForTime(PID* pid, float time, bool parallel = false)
 */
 void PID_Encoder_On_Until_Reflected(PID* pid, float _setpoint, bool parallel = false)
 {
-	if(_setpoint >= getColorReflected(color1))
+	if(_setpoint >= getColorReflected(col1))
 	{
 		PID_Encoder_Start(pid, untilReflected_high, _setpoint);
 	}
