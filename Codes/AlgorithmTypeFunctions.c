@@ -154,35 +154,9 @@ float DegToDeltaEncoder(float deg)
 	return Enc;
 }
 
-float filter_highPass(float prev_filtered, float curr_mes, float prev_mes, float timestep_s, float cuttof_freq)
+float tanh(float x)
 {
-	float alpha = 1 - 1 / (1 + 2 * PI * cuttof_freq * timestep_s);
-
-	return (1 - alpha) * prev_filtered + (1 - alpha) * (curr_mes - prev_mes);
-}
-
-float filter_lowPass(float prev_filtered, float curr_mes, float timestep_s, float cuttof_freq)
-{
-	float alpha = 1 / (1 + 2 * PI * cuttof_freq * timestep_s);
-
-	return alpha * prev_filtered + (1 - alpha) * curr_mes;
-}
-
-float filter_complementary(float filtered_a, float filtered_b, float alpha)
-{
-	return alpha * filtered_a + (1 - alpha) * filtered_b;
-}
-
-float Fusion_Gyro_Encoders()
-{
-	gyro_curr_filtered = filter_highPass(gyro_prev_filtered, gyro_curr_mes, gyro_prev_mes, sampleTime_encoderSpeed / 1000, 70);
-
-	gyro_prev_filtered = gyro_curr_filtered;
-	gyro_prev_mes = gyro_curr_mes;
-
-	encoder_curr_filtered = filter_lowPass(encoder_prev_filtered, encoder_curr_mes, sampleTime_encoderSpeed / 1000, 70);
-
-	encoder_prev_filtered = encoder_curr_filtered;
-
-	return filter_complementary(gyro_curr_filtered , encoder_curr_filtered , 0.4985);
+  float numerator = exp(2 * x) - 1;
+ 	float denominator = exp(2 * x) + 1;
+  return (numerator / denominator);
 }

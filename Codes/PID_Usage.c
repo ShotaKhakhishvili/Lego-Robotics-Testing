@@ -1,8 +1,9 @@
-enum pidType{LineFollower, Gyro, Gyro_OneSided, Encoder};
+enum pidType{LineFollower, Gyro, Encoder, Fuse};
 enum useType{none, on_always, on_untilDone, forTime,
 						untilReflected_high, untilReflected_low,
 						untilEncoder_high, untilEncoder_low,
 						untilDegree_high, untilDegree_low,
+						untilFuse_high, untilFuse_low,
 						untilDistance_far, untilDistance_close};
 struct usage
 {
@@ -56,9 +57,9 @@ void calculateFactor(int i, int &startTime, bool &factor)
 					factor = !inRange(getColorReflected(col1), tasks[i]->setpoint, tasks[i]->acceptableRange);
 					break;
 				case Gyro:
-					factor = !inRange(fusal_angle, tasks[i]->setpoint, tasks[i]->acceptableRange);
+					factor = !inRange(gyro_angle, tasks[i]->setpoint, tasks[i]->acceptableRange);
 					break;
-				case Gyro_OneSided:
+				case Fuse:
 					factor = !inRange(fusal_angle, tasks[i]->setpoint, tasks[i]->acceptableRange);
 					break;
 				case Encoder:
@@ -103,14 +104,22 @@ void calculateFactor(int i, int &startTime, bool &factor)
 				break;
 
 			case untilDegree_high:
-				factor = (bool)(fusal_angle < task_usage[i]._setpoint);
+				factor = (bool)(gyro_angle < task_usage[i]._setpoint);
 				break;
 
 			case untilDegree_low:
+				factor = (bool)(gyro_angle > task_usage[i]._setpoint);
+				break;
+
+			case untilFuse_high:
+				factor = (bool)(fusal_angle < task_usage[i]._setpoint);
+				break;
+
+			case untilFuse_low:
 				factor = (bool)(fusal_angle > task_usage[i]._setpoint);
 				break;
 
-				// ultra sonic win uyenia robots
+			// ultra sonic win uyenia robots
 			case untilDistance_far:
 				factor = (bool)(getUSDistance(usonic) > task_usage[i]._setpoint);
 				break;

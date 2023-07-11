@@ -22,7 +22,7 @@ void PID_Gyro_On_ForTime(PID* pid, float time, bool parallel = false)
 */
 void PID_Gyro_Rotate(PID* pid, float angle, bool parallel = false)
 {
-	float initAngle = fusal_angle; // Vinaxavt Sawyis Kutxes
+	float initAngle = gyro_angle; // Vinaxavt Sawyis Kutxes
 
 	pid->setpoint = initAngle + angle; // Setpointad Vutitebt Sawyiss + Sasurveli Shemotrialebis Kutxes
 
@@ -73,4 +73,22 @@ void PID_Gyro_On_Until_Encoder(PID* pid, float _setpoint, bool parallel = false)
 	{
 		while(task_usage[1].use != none){}
 	}
+}
+
+void PID_Gyro_On(PID* pid, bool parallel = false)
+{
+	PID_Gyro_Start(pid, on_always, 0); // Chavrtavt PID-s
+
+	if(!parallel)
+	{
+		while(task_usage[1].use != none){}
+	}
+}
+
+void PID_Gyro_Off()
+{
+	PID_Gyro_Start(tasks[1], none, 0);
+
+	setMotorSpeed(wheelL, 0);
+	setMotorSpeed(wheelR, 0);
 }

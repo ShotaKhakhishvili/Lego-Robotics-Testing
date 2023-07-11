@@ -65,3 +65,27 @@ void PID_Encoder_Start(PID* pid, useType use, float _setpoint)
 
 	setUsage(2, use, _setpoint, Encoder);
 }
+
+/*
+	Nebismieri PID-s Gamoyeneba Romelic Akontrolebs Borblebs Gyro&Encoder Fuse-ze Dayrdnobit.
+
+	@param [PID*] pid  					PID-s Pointer-i Romelis Gamoyenebac Gvinda
+	@param [float] setpoint 		Fuse-s Sasurveli Mnishvneloba
+*/
+void PID_Fuse_Start(PID* pid, useType use, float coefficient)
+{
+	// Vanulebt PID-s Cvladebs Tu Aqamde Sxva PID-s Viyenebdit An Ar Viyenebdit Arapers
+	if(previouslyUsedPID == NULL || previouslyUsedPID != pid)
+	{
+		PID_resetVariables(pid);
+	}
+
+	previouslyUsedPID = pid;
+
+	// Vaniwebt Globalur Cvladebs Shesabamis Mnishvnelobebs
+	tasks[3] = pid;
+
+	task_usage[3].motorN = 3;
+
+	setUsage(3, use, coefficient, Fuse);
+}

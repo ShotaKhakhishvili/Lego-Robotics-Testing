@@ -30,6 +30,9 @@ struct PID // PID-s Struqtura. Sheinaxavs PID-s Mnishvnelobebs.
 
 	float gearChangeValue;
 
+	float fusingAlpha_OneSided;
+	float fusingAlpha_TwoSided;
+
 	float error; // Setpoint - Measurement
 	float out; // Correction
 }PID;
@@ -79,10 +82,11 @@ void PID_init(PID* pid, float Kp_val, float Ki_val, float Kd_val, float Kn_val, 
 
 		pid->T = 0.02;
 
-		pid->lineCorrectionTime = 0;
+		pid->lineCorrectionTime = 1000;
 		pid->oneSided = false;
 		pid->side = false;
 		pid->acceptableRange = 0;
+		pid->rev = 1
 
 		PID_resetVariables(pid);
 }

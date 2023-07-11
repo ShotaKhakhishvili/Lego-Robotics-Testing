@@ -52,10 +52,9 @@ task PID_gyro() // Amushavebs PID-s Romelic Akontrolebs Borblebs Gyro-s Mixedvit
 
 		int doneFor = timer_count(successStart, time1(T1));
 
-
 		if(factor && !(task_usage[1].use == on_untilDone && doneFor >= 50)) // Mushaobs Tu Factor Aris Chartuli
 		{
-			PID_Update(tasks[1], tasks[1]->setpoint, fusal_angle);
+			PID_Update(tasks[1], tasks[1]->setpoint, gyro_angle);
 
 			float addition = 0;
 
@@ -138,6 +137,61 @@ task PID_Encoder()
 		else if(task_prevUsage[2] != none)
 		{
 			task_usage[2].use = none;
+			stopWheels();
+		}
+	}
+}
+
+task PID_Fuse() // Amushavebs PID-s Romelic Akontrolebs Borblebs Gyro Da Encoder-is Fuse-s Mixedvit
+{
+	int startTime = 0;
+	bool factor = false;
+	int successStart = 0;
+	repeat(forever) // Task-ebi Arian Mudmivar Chaciklulebi.
+	{
+		calculateFactor(3, startTime, factor);
+
+		if(factor)
+		{
+			successStart = time1(T1);
+		}
+
+		int doneFor = timer_count(successStart, time1(T1));
+
+		if(factor && !(task_usage[3].use == on_untilDone && doneFor >= 50)) // Mushaobs Tu Factor Aris Chartuli
+		{
+			PID_Update(tasks[3], tasks[3]->setpoint, fusal_angle);
+
+			float addition = 0;
+
+			if(timer_count(startTime, time1(T1)) < tasks[3]->additionTime)
+				addition = tasks[3]->moveSpeed * tasks[3]->additionMultiplier;
+
+			if(tasks[3]->oneSided)
+			{
+				if(tasks[3]->side)
+				{
+					setMotorSpeed(wheelR, tasks[3]->moveSpeed + tasks[3]->out);
+				}
+				else
+				{
+					setMotorSpeed(wheelL, tasks[3]->moveSpeed - tasks[3]->out);
+				}
+			}
+			else
+			{
+				setMotorSpeed(wheelR, tasks[3]->moveSpeed + tasks[3]->out);
+				setMotorSpeed(wheelL, tasks[3]->moveSpeed - tasks[3]->out);
+			}
+
+			if(task_usage[3] == none)
+			{
+				stopWheels();
+			}
+		}
+		else if(task_prevUsage[3] != none)
+		{
+			task_usage[3].use = none;
 			stopWheels();
 		}
 	}

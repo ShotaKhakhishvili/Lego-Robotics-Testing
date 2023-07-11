@@ -1,6 +1,6 @@
-#pragma config(Sensor, S1,     col1,    sensorEV3_Color)
+#pragma config(Sensor, S1,     col2,    sensorEV3_Color)
 #pragma config(Sensor, S2,     gyro,    sensorEV3_Gyro)
-#pragma config(Sensor, S3,     col2,    sensorEV3_Color)
+#pragma config(Sensor, S3,     col1,    sensorEV3_Color)
 #pragma config(Sensor, S4,     usonic,         sensorEV3_Ultrasonic)
 #pragma config(Motor,  motorA,          claw,    tmotorEV3_Medium, PIDControl, encoder)
 #pragma config(Motor,  motorB,          wheelR,  tmotorEV3_Medium, PIDControl, encoder)
@@ -27,10 +27,10 @@ bool checkStatus = false;
 float wheelRadius = 27.4;
 float disBetweenWheels = 104;
 
-float sampleTime_receiveData = 10;
-float sampleTime_encoderSpeed = 10;
+float sampleTime_dataCalculation = 10;
 
 float gyro_angle = 0;
+float gyro_prev = 0;
 float encoder_WR = 0;
 float encoder_WL = 0;
 float reflected_col1 = 0;
@@ -41,12 +41,6 @@ float prevEncoderWl = 0;
 float prevEncoderWr = 0;
 float currEncoderWl = 0;
 float currEncoderWr = 0;
-
-float speed_Wl = 0;
-float speed_Wr = 0;
-float encoredical_angle = 0;
-float yaw_angularSpeed = 0;
-float prev_yaw_angularSpeed = 0;
 
 float gyro_prev_mes = 0;
 float gyro_prev_filtered = 0;
@@ -60,16 +54,15 @@ float encoder_curr_filtered = 0;
 float prev_fusal_velocity = 0;
 float curr_fusal_velocity = 0;
 
-float prev_gyroic_velocity = 0;
-float gyroic_angle = 0;
-
 float fusal_angle = 0;
 
 #include "AlgorithmTypeFunctions.c"
 #include "PID.c"
 
 PID Encoder_move[5];
+PID LF[5];
 PID Gyro_Rotate[5];
+PID Fuse_Rotate[5];
 
 #include "PID_Usage.c"
 #include "PID_tasks.c"
@@ -77,6 +70,7 @@ PID Gyro_Rotate[5];
 #include "PID_LineFollower.c"
 #include "PID_Gyro.c"
 #include "PID_Encoder.c"
+#include "PID_Fuse.c"
 #include "PID_Functions.c"
 #include "PID_Advanced.c"
 #include "Tasks.c"
@@ -84,15 +78,36 @@ PID Gyro_Rotate[5];
 
 task main()
 {
+	/*
+
+	0 - 5
+	5 - 15
+	15 - 30
+	30 - 60
+	60 - 90
+	90 - 135
+	135 - 180
+	180 - 225
+	225 - 270
+	270 - 360
+
+	*/
+	// ROBOT - EV3
+	// RUN THIS CODE ON [ UTILITY TABLES ] - ( COLOR SENSOR TABLE )
+
 	initializate();
 
-	//Encoder_moveMm_Advanced(500);
+	PID_Gyro_Rotate(Gyro_Rotate[0], 90);
 
-	//Encoder_move[4].oneSided = true;
+	Encoder_moveMm_Advanced(720);
 
-	PID_Gyro_Rotate(Gyro_Rotate[1], 180);
+	PID_Gyro_Rotate(Gyro_Rotate[0], -90);
 
-	//Encoder_moveMm(Encoder_move[4], 3000);
+	Encoder_moveMm_Advanced(150);
 
-	//wait(3000);
+	AAAA = 12;
+
+	PID_LineFollower_On_ForTime(LF[0], 1000);
+
+	PID_LineFollower_On_Until_Reflected(LF[0], 15);
 }
